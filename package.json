@@ -1,0 +1,12 @@
+{
+  "name": "cac-couriers",
+  "version": "1.0.0",
+  "description": "CAC Couriers — root config for Railway",
+  "scripts": {
+    "install": "cd cac-backend && npm install",
+    "start": "cd cac-backend && node server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CAC Couriers — Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body id="dashboardRoot">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-mark">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z"/></svg>
+      </div>
+      <div class="sidebar-logo-text">
+        <strong>CAC</strong>
+        <span>Couriers &amp; Shipping</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-link active" data-section="overview">
+        <span class="nav-icon-wrap">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.689z"/><path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.432z"/></svg>
+        </span>
+        <span>Overview</span>
+      </a>
+      <a href="#" class="nav-link" data-section="shipments">
+        <span class="nav-icon-wrap">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12.378 1.602a.25.25 0 00-.756 0L1.5 6.235l4.88 2.162.615-.262 9.095-3.897-3.712-2.636zM21.75 7.498l-9 3.86V21.75l9-3.86V7.498zM11.25 21.75V11.358l-9-3.86V17.89l9 3.86z"/></svg>
+        </span>
+        <span>Shipments</span>
+      </a>
+      <a href="#" class="nav-link" data-section="new-shipment">
+        <span class="nav-icon-wrap">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clip-rule="evenodd"/></svg>
+        </span>
+        <span>New Shipment</span>
+      </a>
+      <a href="#" class="nav-link" data-section="contacts">
+        <span class="nav-icon-wrap">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z"/><path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z"/></svg>
+        </span>
+        <span>Messages</span>
+        <span class="nav-badge" id="navMsgBadge" style="display:none"></span>
+      </a>
+      <a href="#" class="nav-link" data-section="chat">
+        <span class="nav-icon-wrap">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M4.848 2.771A49.144 49.144 0 0112 2.25c2.43 0 4.817.178 7.152.52 1.978.292 3.348 2.024 3.348 3.97v6.02c0 1.946-1.37 3.678-3.348 3.97a48.901 48.901 0 01-3.476.383.39.39 0 00-.297.17l-2.755 4.133a.75.75 0 01-1.248 0l-2.755-4.133a.39.39 0 00-.297-.17 48.9 48.9 0 01-3.476-.384c-1.978-.29-3.348-2.024-3.348-3.97V6.741c0-1.946 1.37-3.68 3.348-3.97z" clip-rule="evenodd"/></svg>
+        </span>
+        <span>Live Chat</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <span id="adminEmail" class="admin-email-label"></span>
+      <button id="logoutBtn" class="btn btn-outline btn-sm">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 3.75A1.5 1.5 0 006 5.25v13.5a1.5 1.5 0 001.5 1.5h6a1.5 1.5 0 001.5-1.5V15a.75.75 0 011.5 0v3.75a3 3 0 01-3 3h-6a3 3 0 01-3-3V5.25a3 3 0 013-3h6a3 3 0 013 3V9A.75.75 0 0115 9V5.25a1.5 1.5 0 00-1.5-1.5h-6zm10.72 4.72a.75.75 0 011.06 0l3 3a.75.75 0 010 1.06l-3 3a.75.75 0 11-1.06-1.06l1.72-1.72H9a.75.75 0 010-1.5h10.94l-1.72-1.72a.75.75 0 010-1.06z" clip-rule="evenodd"/></svg>
+        Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- OVERVIEW -->
+    <section id="section-overview" class="section active">
+      <h2 class="section-title">Overview</h2>
+      <div class="stats-grid">
+
+        <div class="stat-card">
+          <div class="stat-icon" style="background:linear-gradient(145deg,#E8352E 0%,#A51410 60%,#7A0D0A 100%);box-shadow:0 1px 0 rgba(255,255,255,.15) inset,0 -1px 0 rgba(0,0,0,.3) inset,0 6px 20px rgba(208,32,26,.5),0 2px 6px rgba(0,0,0,.4);position:relative;overflow:hidden;">
+            <span style="position:absolute;top:0;left:0;right:0;height:50%;background:linear-gradient(180deg,rgba(255,255,255,.16) 0%,transparent 100%);pointer-events:none;border-radius:14px 14px 0 0;"></span>
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="white" style="filter:drop-shadow(0 2px 4px rgba(0,0,0,.3));position:relative;z-index:1"><path d="M12.378 1.602a.25.25 0 00-.756 0L1.5 6.235l4.88 2.162.615-.262 9.095-3.897-3.712-2.636zM21.75 7.498l-9 3.86V21.75l9-3.86V7.498zM11.25 21.75V11.358l-9-3.86V17.89l9 3.86z"/></svg>
+          </div>
+          <div><div class="stat-number" id="statsTotal">—</div><div class="stat-label">Total Shipments</div></div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon" style="background:linear-gradient(145deg,#F5B731 0%,#C8860A 60%,#8F5E05 100%);box-shadow:0 1px 0 rgba(255,255,255,.2) inset,0 -1px 0 rgba(0,0,0,.3) inset,0 6px 20px rgba(232,160,32,.5),0 2px 6px rgba(0,0,0,.4);position:relative;overflow:hidden;">
+            <span style="position:absolute;top:0;left:0;right:0;height:50%;background:linear-gradient(180deg,rgba(255,255,255,.18) 0%,transparent 100%);pointer-events:none;border-radius:14px 14px 0 0;"></span>
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="white" style="filter:drop-shadow(0 2px 4px rgba(0,0,0,.3));position:relative;z-index:1"><path d="M3.375 4.5C2.339 4.5 1.5 5.34 1.5 6.375V13.5h12V6.375c0-1.036-.84-1.875-1.875-1.875h-8.25zM13.5 13.5h.187a3 3 0 011.5 5.57v.93a.75.75 0 01-.75.75h-13.5a.75.75 0 01-.75-.75v-.93a3 3 0 011.5-5.57H13.5z"/><path d="M13.5 4.5v9H21v-4.5a.75.75 0 00-.22-.53l-3-3a.75.75 0 00-.53-.22H13.5zM15.75 16.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z"/></svg>
+          </div>
+          <div><div class="stat-number" id="statsInTransit">—</div><div class="stat-label">In Transit</div></div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon" style="background:linear-gradient(145deg,#34D874 0%,#15A04A 60%,#0B6B30 100%);box-shadow:0 1px 0 rgba(255,255,255,.18) inset,0 -1px 0 rgba(0,0,0,.3) inset,0 6px 20px rgba(34,197,94,.45),0 2px 6px rgba(0,0,0,.4);position:relative;overflow:hidden;">
+            <span style="position:absolute;top:0;left:0;right:0;height:50%;background:linear-gradient(180deg,rgba(255,255,255,.16) 0%,transparent 100%);pointer-events:none;border-radius:14px 14px 0 0;"></span>
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="white" style="filter:drop-shadow(0 2px 4px rgba(0,0,0,.3));position:relative;z-index:1"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd"/></svg>
+          </div>
+          <div><div class="stat-number" id="statsDelivered">—</div><div class="stat-label">Delivered</div></div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon" style="background:linear-gradient(145deg,#4A90D9 0%,#1E5FA8 60%,#0D3670 100%);box-shadow:0 1px 0 rgba(255,255,255,.18) inset,0 -1px 0 rgba(0,0,0,.3) inset,0 6px 20px rgba(74,144,217,.45),0 2px 6px rgba(0,0,0,.4);position:relative;overflow:hidden;">
+            <span style="position:absolute;top:0;left:0;right:0;height:50%;background:linear-gradient(180deg,rgba(255,255,255,.16) 0%,transparent 100%);pointer-events:none;border-radius:14px 14px 0 0;"></span>
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="white" style="filter:drop-shadow(0 2px 4px rgba(0,0,0,.3));position:relative;z-index:1"><path fill-rule="evenodd" d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 00-.986.57c-.166.115-.334.126-.45.083L6.3 5.508a1.875 1.875 0 00-2.282.819l-.922 1.597a1.875 1.875 0 00.432 2.385l.84.692c.095.078.17.229.154.43a7.598 7.598 0 000 1.139c.015.2-.059.352-.153.43l-.841.692a1.875 1.875 0 00-.432 2.385l.922 1.597a1.875 1.875 0 002.282.818l1.019-.382c.115-.043.283-.031.45.082.312.214.641.405.985.57.182.088.277.228.297.35l.178 1.071c.151.904.933 1.567 1.85 1.567h1.844c.916 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.114-.26.297-.349.344-.165.673-.356.985-.57.167-.114.335-.125.45-.082l1.02.382a1.875 1.875 0 002.28-.819l.923-1.597a1.875 1.875 0 00-.432-2.385l-.84-.692c-.095-.078-.17-.229-.154-.43a7.614 7.614 0 000-1.139c-.016-.2.059-.352.153-.43l.84-.692c.708-.582.891-1.59.433-2.385l-.922-1.597a1.875 1.875 0 00-2.282-.818l-1.02.382c-.114.043-.282.031-.449-.083a7.49 7.49 0 00-.985-.57c-.183-.087-.277-.227-.297-.348l-.179-1.072a1.875 1.875 0 00-1.85-1.567h-1.843zM12 15.75a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5z" clip-rule="evenodd"/></svg>
+          </div>
+          <div><div class="stat-number" id="statsProcessing">—</div><div class="stat-label">Processing</div></div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon" style="background:linear-gradient(145deg,#9B6DFF 0%,#6B3FD4 60%,#401A99 100%);box-shadow:0 1px 0 rgba(255,255,255,.18) inset,0 -1px 0 rgba(0,0,0,.3) inset,0 6px 20px rgba(155,109,255,.45),0 2px 6px rgba(0,0,0,.4);position:relative;overflow:hidden;">
+            <span style="position:absolute;top:0;left:0;right:0;height:50%;background:linear-gradient(180deg,rgba(255,255,255,.16) 0%,transparent 100%);pointer-events:none;border-radius:14px 14px 0 0;"></span>
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="white" style="filter:drop-shadow(0 2px 4px rgba(0,0,0,.3));position:relative;z-index:1"><path fill-rule="evenodd" d="M6.912 3a3 3 0 00-2.868 2.118l-2.411 7.838a3 3 0 00-.133.882V18a3 3 0 003 3h15a3 3 0 003-3v-4.162c0-.299-.045-.596-.133-.882l-2.412-7.838A3 3 0 0017.088 3H6.912zm13.823 9.75H16.5a3 3 0 01-3 3h-3a3 3 0 01-3-3H3.265l2-6.5h13.47l2 6.5z" clip-rule="evenodd"/></svg>
+          </div>
+          <div><div class="stat-number" id="statsMessages">—</div><div class="stat-label">Unread Messages</div></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SHIPMENTS -->
+    <section id="section-shipments" class="section">
+      <div class="section-header">
+        <h2 class="section-title">Shipments</h2>
+        <button class="btn btn-primary btn-sm" onclick="showSection('new-shipment')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z" clip-rule="evenodd"/></svg>
+          New Shipment
+        </button>
+      </div>
+      <div class="filters-bar">
+        <input id="searchInput" type="text" placeholder="Search by code, name, content…" class="input-sm" onkeydown="if(event.key==='Enter') applyFilters()" />
+        <select id="statusFilter" class="input-sm">
+          <option value="">All Statuses</option>
+          <option value="processing">Processing</option>
+          <option value="in_transit">In Transit</option>
+          <option value="out_for_delivery">Out for Delivery</option>
+          <option value="delivered">Delivered</option>
+          <option value="on_hold">On Hold</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+        <select id="modeFilter" class="input-sm">
+          <option value="">All Modes</option>
+          <option value="air">Air</option>
+          <option value="sea">Sea</option>
+          <option value="land">Land</option>
+        </select>
+        <button class="btn btn-secondary btn-sm" onclick="applyFilters()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 100 13.5 6.75 6.75 0 000-13.5zM2.25 10.5a8.25 8.25 0 1114.59 5.28l4.69 4.69a.75.75 0 11-1.06 1.06l-4.69-4.69A8.25 8.25 0 012.25 10.5z" clip-rule="evenodd"/></svg>
+          Search
+        </button>
+      </div>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead><tr><th>Tracking Code</th><th>Recipient</th><th>Content</th><th>Mode</th><th>Status</th><th>Arrival</th><th>Actions</th></tr></thead>
+          <tbody id="shipmentsTableBody"><tr><td colspan="7" class="empty-row">Loading…</td></tr></tbody>
+        </table>
+      </div>
+      <div id="pagination" class="pagination"></div>
+    </section>
+
+    <!-- NEW / EDIT SHIPMENT -->
+    <section id="section-new-shipment" class="section">
+      <div class="section-header">
+        <h2 class="section-title" id="shipmentFormTitle">New Shipment</h2>
+        <button class="btn btn-outline btn-sm" onclick="resetShipmentForm()">Reset Form</button>
+      </div>
+      <input type="hidden" id="shipmentId" />
+      <form id="shipmentForm">
+        <div class="form-fieldset"><legend>Tracking &amp; Status</legend>
+          <div class="form-row">
+            <div class="form-group"><label>Tracking Code <small>(leave blank to auto-generate)</small></label><input type="text" id="fTrackingCode" placeholder="CAC-2025-XXXXXXXX" /></div>
+            <div class="form-group"><label>Transport Mode</label><select id="fTransportMode"><option value="air">Air Freight</option><option value="sea">Sea Shipping</option><option value="land">Land Shipping</option></select></div>
+            <div class="form-group"><label>Shipping Status</label><select id="fStatus"><option value="processing">Processing</option><option value="in_transit">In Transit</option><option value="out_for_delivery">Out for Delivery</option><option value="delivered">Delivered</option><option value="on_hold">On Hold</option><option value="cancelled">Cancelled</option></select></div>
+          </div>
+        </div>
+        <div class="form-fieldset"><legend>Sender Information</legend>
+          <div class="form-row">
+            <div class="form-group"><label>Name</label><input type="text" id="fSenderName" placeholder="Sender name" /></div>
+            <div class="form-group"><label>Phone</label><input type="text" id="fSenderPhone" placeholder="+1 000 000 0000" /></div>
+            <div class="form-group"><label>Email</label><input type="email" id="fSenderEmail" placeholder="sender@example.com" /></div>
+            <div class="form-group"><label>Address</label><input type="text" id="fSenderAddress" placeholder="Full address" /></div>
+          </div>
+        </div>
+        <div class="form-fieldset"><legend>Recipient Information</legend>
+          <div class="form-row">
+            <div class="form-group"><label>Name <span style="color:var(--red)">*</span></label><input type="text" id="fRecipientName" placeholder="Recipient name" required /></div>
+            <div class="form-group"><label>Phone</label><input type="text" id="fRecipientPhone" placeholder="+1 000 000 0000" /></div>
+            <div class="form-group"><label>Email</label><input type="email" id="fRecipientEmail" placeholder="recipient@example.com" /></div>
+            <div class="form-group"><label>Address <span style="color:var(--red)">*</span></label><input type="text" id="fRecipientAddress" placeholder="Full delivery address" required /></div>
+          </div>
+        </div>
+        <div class="form-fieldset"><legend>Package Details</legend>
+          <div class="form-row">
+            <div class="form-group"><label>Content</label><input type="text" id="fPackageContent" placeholder="e.g. Electronic Components" /></div>
+            <div class="form-group"><label>Weight (kg)</label><input type="number" id="fWeight" placeholder="0.00" step="0.01" min="0" /></div>
+            <div class="form-group"><label>Quantity</label><input type="number" id="fQuantity" placeholder="1" min="1" value="1" /></div>
+            <div class="form-group"><label>Dimensions</label><input type="text" id="fDimensions" placeholder="L x W x H cm" /></div>
+          </div>
+        </div>
+        <div class="form-fieldset"><legend>Route &amp; Dates</legend>
+          <div class="form-row">
+            <div class="form-group"><label>Origin</label><input type="text" id="fOrigin" placeholder="City, Country" /></div>
+            <div class="form-group"><label>Destination</label><input type="text" id="fDestination" placeholder="City, Country" /></div>
+            <div class="form-group"><label>Current Location</label><input type="text" id="fCurrentLocation" placeholder="Where is it now?" /></div>
+            <div class="form-group"><label>Shipment Date</label><input type="date" id="fShipmentDate" /></div>
+            <div class="form-group"><label>Est. Arrival Date</label><input type="date" id="fArrivalDate" /></div>
+          </div>
+        </div>
+        <div class="form-fieldset"><legend>Financial (Admin Only)</legend>
+          <div class="form-row">
+            <div class="form-group"><label>Shipping Fee</label><input type="number" id="fFee" placeholder="0.00" step="0.01" min="0" /></div>
+            <div class="form-group"><label>Currency</label><select id="fCurrency"><option value="USD">USD</option><option value="GBP">GBP</option><option value="EUR">EUR</option><option value="NGN">NGN</option><option value="XOF">XOF</option></select></div>
+            <div class="form-group"><label>Admin Notes</label><textarea id="fNotes" placeholder="Internal notes…" rows="2"></textarea></div>
+          </div>
+        </div>
+        <p id="shipmentFormError" class="error-msg"></p>
+        <p id="shipmentFormSuccess" class="success-msg"></p>
+        <div class="form-actions">
+          <button type="submit" id="shipmentSubmitBtn" class="btn btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm.53 5.47a.75.75 0 00-1.06 0l-3 3a.75.75 0 101.06 1.06l1.72-1.72v5.69a.75.75 0 001.5 0v-5.69l1.72 1.72a.75.75 0 101.06-1.06l-3-3z" clip-rule="evenodd"/></svg>
+            Save Shipment
+          </button>
+          <button type="button" class="btn btn-outline" onclick="showSection('shipments')">Cancel</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- CONTACTS -->
+    <section id="section-contacts" class="section">
+      <h2 class="section-title">Messages</h2>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead><tr><th>Name</th><th>Email</th><th>Subject</th><th>Message</th><th>Date</th><th>Action</th></tr></thead>
+          <tbody id="contactsTableBody"><tr><td colspan="6" class="empty-row">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- LIVE CHAT -->
+    <section id="section-chat" class="section">
+      <h2 class="section-title">Live Chat</h2>
+      <div class="chat-layout">
+        <div class="chat-sessions-panel">
+          <div class="chat-sessions-header">Active Visitors</div>
+          <ul class="session-list" id="sessionList">
+            <li style="padding:20px;font-size:12px;color:var(--muted);text-align:center">No active visitors yet</li>
+          </ul>
+        </div>
+        <div class="chat-conversation-panel">
+          <div id="chatMessages" class="chat-messages">
+            <p style="text-align:center;color:var(--muted);font-size:13px;padding:48px 0">Select a visitor to view messages</p>
+          </div>
+          <div class="chat-input-bar">
+            <input id="chatInput" type="text" placeholder="Type a reply…" disabled />
+            <button id="chatSendBtn" class="btn btn-primary btn-sm" disabled>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z"/></svg>
+              Send
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>
