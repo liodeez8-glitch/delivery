@@ -109,8 +109,16 @@ app.use('/api/track',   trackingRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/admin',   adminRoutes);
 
-app.get('/health', (_req, res) => res.json({ status: 'ok', ts: new Date() }));
+// ────────────────
+// Healthcheck route
+// ────────────────
+app.get('/health', (_req, res) => {
+  res.status(200).send('OK');
+});
 
+// ────────────────
+// Catch-all for frontend and unknown API/admin paths
+// ────────────────
 app.use('*', (req, res) => {
   if (req.originalUrl.startsWith('/api') || req.originalUrl.startsWith('/admin')) {
     return res.status(404).json({ success: false, message: `Route ${req.originalUrl} not found.` });
@@ -126,8 +134,4 @@ server.listen(PORT, () => {
   console.log(`Allowed origins: ${getAllowedOrigins().join(', ')}\n`);
 });
 
-process.on('SIGTERM', () => { server.close(() => process.exit(0)); });
-
-app.get('/health', (req, res) => {
-  res.status(200).send('OK');
-});
+process.on('SIGTERM', () => { server.close(() => process.exit(0)); });;
