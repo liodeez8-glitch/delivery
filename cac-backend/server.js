@@ -127,3 +127,7 @@ server.listen(PORT, () => {
 });
 
 process.on('SIGTERM', () => { server.close(() => process.exit(0)); });
+
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
