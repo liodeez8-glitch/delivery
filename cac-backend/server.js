@@ -20,9 +20,7 @@ const adminRoutes    = require('./routes/adminRoutes');
 const app    = express();
 const server = http.createServer(app);
 
-// ────────────────
-// Dev frontend origins
-// ────────────────
+// ── DEV ORIGINS ───────────────────────────
 const DEV_ORIGINS = [
   'http://localhost:3000',
   'http://localhost:3010',
@@ -52,14 +50,15 @@ const corsOptions = {
   exposedHeaders: ['Authorization'],
 };
 
-// OPTIONS preflight MUST come before other middleware
+// OPTIONS preflight
 app.options('*', cors(corsOptions));
 app.use(cors(corsOptions));
 
+// ── Socket.IO ───────────────────────────
 const io = new Server(server, {
   cors: {
     origin(origin, cb) { corsOptions.origin(origin, cb); },
-    methods:     ['GET', 'POST'],
+    methods: ['GET', 'POST'],
     credentials: true,
   },
   transports: ['websocket', 'polling'],
@@ -68,9 +67,7 @@ const io = new Server(server, {
 const { initChat } = require('./services/chatService');
 initChat(io);
 
-// ────────────────
-// Ensure admin account
-// ────────────────
+// ── Ensure admin exists ─────────────────
 async function ensureAdmin() {
   try {
     const email    = process.env.ADMIN_EMAIL    || 'admin@test.com';
@@ -90,9 +87,7 @@ async function ensureAdmin() {
 
 connectDB().then(ensureAdmin);
 
-// ────────────────
-// Security & parsing middleware
-// ────────────────
+// ── Middleware ─────────────────────────
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
@@ -101,9 +96,6 @@ if (process.env.NODE_ENV !== 'test') {
   app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 }
 
-// ────────────────
-// Rate limiting
-// ────────────────
 app.use('/api/', rateLimit({
   windowMs: 15 * 60 * 1000, max: 100,
   standardHeaders: true, legacyHeaders: false,
@@ -114,27 +106,19 @@ app.use('/api/track', rateLimit({
   message: { success: false, message: 'Too many tracking attempts. Please wait a few minutes.' },
 }));
 
-// ────────────────
-// Healthcheck route (must be ABOVE static middleware)
-// ────────────────
-app.get('/health', (_req, res) => res.status(200).send('OK'));
-
-// ────────────────
-// Static frontend/admin
-// ────────────────
+// ── Static files ───────────────────────
 app.use('/admin', express.static(path.join(__dirname, 'admin/public')));
 app.use(express.static(path.join(__dirname, '../frontend'), { extensions: ['html'] }));
 
-// ────────────────
-// API routes
-// ────────────────
+// ── Routes ────────────────────────────
 app.use('/api/track',   trackingRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/admin',   adminRoutes);
 
-// ────────────────
-// Catch-all for frontend & unknown API/admin
-// ────────────────
+// ── Health check ──────────────────────
+app.get('/health', (_req, res) => res.status(200).send('OK'));
+
+// ── Catch-all for frontend and unknown API routes ─────
 app.use('*', (req, res) => {
   if (req.originalUrl.startsWith('/api') || req.originalUrl.startsWith('/admin')) {
     return res.status(404).json({ success: false, message: `Route ${req.originalUrl} not found.` });
@@ -142,19 +126,17 @@ app.use('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
-// ────────────────
-// Error handling
-// ────────────────
+// ── Error handler ─────────────────────
 app.use(errorHandler);
 
-// ────────────────
-// Start server
-// ────────────────
+// ── Start server ─────────────────────
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`\nCAC Couriers running on port ${PORT}`);
   console.log(`Allowed origins: ${getAllowedOrigins().join(', ')}\n`);
 });
+
+process.on('SIGTERM', () => { server.close(() => process.exit(0)); });
 
 // ────────────────
 // Graceful shutdown
