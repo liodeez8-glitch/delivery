@@ -139,7 +139,7 @@ app.use('*', (req, res) => {
 app.use(errorHandler);
 
 // ── Start Server ────────────────────
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT;
 server.listen(PORT, () => {
   console.log(`\nCAC Couriers running on port ${PORT}`);
   console.log(`Allowed origins: ${getAllowedOrigins().join(', ')}\n`);
