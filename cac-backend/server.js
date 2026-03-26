@@ -106,9 +106,8 @@ app.use('/api/track', rateLimit({
   message: { success: false, message: 'Too many tracking attempts. Please wait a few minutes.' },
 }));
 
-// ── Static files ───────────────────────
-app.use('/admin', express.static(path.join(__dirname, 'admin/public')));
-app.use(express.static(path.join(__dirname, '../frontend'), { extensions: ['html'] }));
+// Serve admin panel as main site
+app.use(express.static(path.join(__dirname, 'admin/public')));
 
 // ── Routes ────────────────────────────
 app.use('/api/track',   trackingRoutes);
@@ -120,10 +119,7 @@ app.get('/health', (_req, res) => res.status(200).send('OK'));
 
 // ── Catch-all for frontend and unknown API routes ─────
 app.use('*', (req, res) => {
-  if (req.originalUrl.startsWith('/api') || req.originalUrl.startsWith('/admin')) {
-    return res.status(404).json({ success: false, message: `Route ${req.originalUrl} not found.` });
-  }
-  res.sendFile(path.join(__dirname, '../frontend/index.html'));
+  res.sendFile(path.join(__dirname, 'admin/public/index.html'));
 });
 
 // ── Error handler ─────────────────────
