@@ -20,6 +20,9 @@ const adminRoutes = require('./routes/adminRoutes');
 const app = express();
 const server = http.createServer(app);
 
+// Add this at the top, after `const app = express();`
+app.get('/', (_req, res) => res.send('CAC Backend is running!'));
+
 // ── Healthcheck ──────────────────────
 app.get('/health', (_req, res) => res.status(200).send('OK'));
 
