@@ -140,6 +140,9 @@ app.use(errorHandler);
 
 // ── Start Server ────────────────────
 const PORT = process.env.PORT;
+
+console.log("🚨 NEW DEPLOYMENT CODE RUNNING 🚨");
+
 server.listen(PORT, () => {
   console.log(`\nCAC Couriers running on port ${PORT}`);
   console.log(`Allowed origins: ${getAllowedOrigins().join(', ')}\n`);
