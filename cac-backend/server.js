@@ -20,13 +20,11 @@ const adminRoutes = require('./routes/adminRoutes');
 const app = express();
 const server = http.createServer(app);
 
-// Add this at the top, after `const app = express();`
+// Basic routes
 app.get('/', (_req, res) => res.send('CAC Backend is running!'));
-
-// ── Healthcheck ──────────────────────
 app.get('/health', (_req, res) => res.status(200).send('OK'));
 
-// ── Dev / Frontend Origins ───────────
+// Allowed origins
 const DEV_ORIGINS = [
   'http://localhost:3000',
   'http://localhost:3010',
@@ -49,36 +47,33 @@ const corsOptions = {
     if (!origin) return cb(null, true);
     const allowed = getAllowedOrigins();
     if (allowed.includes(origin)) return cb(null, true);
-    if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) return cb(null, true);
-    cb(new Error(`CORS: Origin "${origin}" not allowed. Add it to FRONTEND_ORIGIN env var.`));
+    return cb(new Error('Not allowed by CORS'));
   },
   credentials: true,
-  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  exposedHeaders: ['Authorization'],
 };
 
-app.options('*', cors(corsOptions));
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
+// Socket.IO
 const io = new Server(server, {
   cors: {
     origin(origin, cb) { corsOptions.origin(origin, cb); },
-    methods: ['GET', 'POST'],
     credentials: true,
   },
-  transports: ['websocket', 'polling'],
 });
 
 const { initChat } = require('./services/chatService');
 initChat(io);
 
-// ── Ensure Admin ─────────────────────
+// Admin setup
 async function ensureAdmin() {
   try {
     const email = process.env.ADMIN_EMAIL || 'admin@test.com';
     const password = process.env.ADMIN_PASSWORD || 'AdminRG';
+
     const exists = await Admin.findOne({ email });
+
     if (!exists) {
       const admin = new Admin({ username: 'admin_user', email, password });
       await admin.save();
@@ -93,61 +88,54 @@ async function ensureAdmin() {
 
 connectDB().then(ensureAdmin);
 
-// ── Middleware ───────────────────────
+// Middleware
 app.use(helmet({ contentSecurityPolicy: false }));
-app.use(express.json({ limit: '1mb' }));
-app.use(express.urlencoded({ extended: true, limit: '1mb' }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 if (process.env.NODE_ENV !== 'test') {
-  app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
+  app.use(morgan('dev'));
 }
 
-// ── Rate Limiting ────────────────────
+// Rate limiting
 app.use('/api/', rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: { success: false, message: 'Too many requests. Please try again later.' },
 }));
 
 app.use('/api/track', rateLimit({
   windowMs: 5 * 60 * 1000,
   max: 30,
-  message: { success: false, message: 'Too many tracking attempts. Please wait a few minutes.' },
 }));
 
-// ── Static Routes ────────────────────
+// Static files
 app.use('/admin', express.static(path.join(__dirname, 'admin/public')));
-app.use(express.static(path.join(__dirname, '../frontend'), { extensions: ['html'] }));
+app.use(express.static(path.join(__dirname, '../frontend')));
 
-// ── API Routes ──────────────────────
+// API routes
 app.use('/api/track', trackingRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/admin', adminRoutes);
 
-// ── Catch-all for frontend ──────────
+// Catch-all
 app.use('*', (req, res) => {
   if (req.originalUrl.startsWith('/api') || req.originalUrl.startsWith('/admin')) {
-    return res.status(404).json({ success: false, message: `Route ${req.originalUrl} not found.` });
+    return res.status(404).json({ message: 'Route not found' });
   }
-  // Serve frontend index.html for everything else
   res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
-// ── Error Handler ───────────────────
+// Error handler
 app.use(errorHandler);
 
-// ── Start Server ────────────────────
+// ✅ ONLY ONE SERVER START (IMPORTANT)
 const PORT = process.env.PORT || 3000;
-   app.listen(PORT, () => {
-     console.log(`Server running on port ${PORT}`);
-   });
 
 server.listen(PORT, () => {
-  console.log(`\nCAC Couriers running on port ${PORT}`);
-  console.log(`Allowed origins: ${getAllowedOrigins().join(', ')}\n`);
+  console.log(`Server running on port ${PORT}`);
 });
 
-// ── Graceful Shutdown ───────────────
-process.on('SIGTERM', () => { server.close(() => process.exit(0)); });
+// Shutdown
+process.on('SIGTERM', () => {
+  server.close(() => process.exit(0));
+});
