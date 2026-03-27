@@ -139,9 +139,10 @@ app.use('*', (req, res) => {
 app.use(errorHandler);
 
 // ── Start Server ────────────────────
-const PORT = process.env.PORT || 8080; // fallback for local testing
-
-console.log("🚨 NEW DEPLOYMENT CODE RUNNING 🚨");
+const PORT = process.env.PORT || 3000;
+   app.listen(PORT, () => {
+     console.log(`Server running on port ${PORT}`);
+   });
 
 server.listen(PORT, () => {
   console.log(`\nCAC Couriers running on port ${PORT}`);
